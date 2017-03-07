@@ -1,6 +1,6 @@
 #!/usr/bin/expect -f
 
-set timeout 10
+set timeout 120
 
 set ip [lindex $argv 0]
 set pw [lindex $argv 1]

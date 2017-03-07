@@ -16,7 +16,8 @@ plans = avail.linodeplans()
 print("Fetched all plans")
 smallest_plan = sorted(plans, key=lambda p: p.ram)[0]
 
-grub_kernel_id = 220
+grub_kernel_id = 210
+direct_disk_kernel_id = 213
 
 def main():
     MAIN_PASSWORD = sys.argv[1]
@@ -28,7 +29,7 @@ def main():
     while not hasattr(l, "totalhd"):
         print("Waiting for Linode to be created")
         l = linode.view(linode_id=l.linodeid)[0]
-        sleep(0.5)
+        sleep(1)
 
     linode.ip.addprivate(l.linodeid)
     print("Added private IP")
@@ -57,7 +58,7 @@ def main():
         i += 1
         if i > len(disks_to_check) - 1:
             i = 0
-        sleep(0.5)
+        sleep(5)
 
     no_helpers = {
         "disable_update_db": False,
@@ -75,7 +76,7 @@ def main():
     print("Created install config")
 
     normal_config = linode.config.create(
-        l.linodeid, grub_kernel_id, "Normal Config", [primary_disk.diskid],
+        l.linodeid, direct_disk_kernel_id, "Normal Config", [primary_disk.diskid],
         helpers=no_helpers)
     print("Created normal config")
 
@@ -83,21 +84,24 @@ def main():
     while l.status != 1:
         print("Waiting for Linode to boot into install config")
         l = linode.view(l.linodeid)[0]
-        sleep(0.5)
+        sleep(15)
 
     # Allow time for ssh server to start
     print("Waiting for ssh server to start")
-    sleep(10)
+    sleep(30)
 
     ips = linode.ip.view(l.linodeid)
     print("Fetched ips")
-    ip = [ip for ip in ips if not ip.ispublic][0]
+    ip = [ip for ip in ips if ip.ispublic][0]
 
     print("Started image deploy process")
-    subprocess.call(["./ssh.tcl", ip.ipaddress, TMP_PASSWORD])
+    while subprocess.call(["./ssh.tcl", ip.ipaddress, TMP_PASSWORD]) > 0:
+        print("Waiting for ssh server")
+        sleep(15)
+
     print("Image deployed")
 
-    linode.reboot(l.linodeid, primary_config.configid)
+    linode.reboot(l.linodeid, normal_config.configid)
     print("Rebooted into normal config")
 
 if __name__ == "__main__":
