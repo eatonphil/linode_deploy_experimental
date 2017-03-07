@@ -20,8 +20,9 @@ grub_kernel_id = 210
 direct_disk_kernel_id = 213
 
 def main():
-    MAIN_PASSWORD = sys.argv[1]
-    TMP_PASSWORD = sys.argv[2]
+    IMAGE = sys.argv[1]
+    MAIN_PASSWORD = sys.argv[2]
+    TMP_PASSWORD = sys.argv[3]
 
     l = linode.create(fremont.datacenterid, smallest_plan.planid)
     print("Created a linode")
@@ -75,9 +76,12 @@ def main():
         [tmp_disk.diskid, primary_disk.diskid], helpers=install_config_helpers)
     print("Created install config")
 
+    virt_mode = None
+    if "openbsd" in IMAGE:
+        virt_mode = "fullvirt"
     normal_config = linode.config.create(
         l.linodeid, direct_disk_kernel_id, "Normal Config", [primary_disk.diskid],
-        helpers=no_helpers)
+        helpers=no_helpers, virt_mode=virt_mode)
     print("Created normal config")
 
     linode.boot(l.linodeid, install_config.configid)
@@ -95,7 +99,7 @@ def main():
     ip = [ip for ip in ips if ip.ispublic][0]
 
     print("Started image deploy process")
-    while subprocess.call(["./ssh.tcl", ip.ipaddress, TMP_PASSWORD]) > 0:
+    while subprocess.call(["./ssh.tcl", IMAGE, ip.ipaddress, TMP_PASSWORD]) > 0:
         print("Waiting for ssh server")
         sleep(15)
 
