@@ -103,8 +103,7 @@ def main():
 
         tmp_disk_size = 3072
         main_disk_size = l.totalhd - tmp_disk_size
-        primary_disk = linode.disk.create_from_distribution(
-            l.linodeid, debian.distributionid, "PrimaryDisk", main_disk_size, tmp_password)
+        primary_disk = linode.disk.create(l.linodeid, "PrimaryDisk", "raw", main_disk_size)
         print("Created first disk")
 
         tmp_disk = linode.disk.create_from_distribution(
@@ -171,19 +170,19 @@ def main():
 
         print("Image deployed")
 
-        if args.boot_immediately:
-            print("Linode rebooting")
-            linode.reboot(l.linodeid, normal_config.configid)
-        else:
-            print("Linode shutting down")
-            linode.shutdown(l.linodeid)
-
         if not args.no_cleanup:
+            print("Shutting down for cleanup")
+            linode.shutdown(l.linodeid)
             print("Cleaning up temporary configs and disks")
             linode.config.delete(l.linodeid, install_config.configid)
             linode.disk.delete(l.linodeid, tmp_disk.diskid)
-            # TODO: make disk images without partitions
-            # linode.disk.resize(l.linodeid, primary_disk.diskid, l.totalhd)
+
+            # Resize primary disk to full size
+            linode.disk.resize(l.linodeid, primary_disk.diskid, l.totalhd)
+
+        if args.boot_immediately:
+            print("Linode rebooting")
+            linode.reboot(l.linodeid, normal_config.configid)
 
         status = "powering off"
         if args.boot_immediately:
