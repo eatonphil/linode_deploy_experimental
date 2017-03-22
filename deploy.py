@@ -7,7 +7,7 @@ import time
 
 from linode_v3 import linode, avail
 
-IMAGES = ["freebsd-11-0", "openbsd-6-0"]
+IMAGES = ["freebsd-11-0", "openbsd-6-0", "netbsd-7-1"]
 
 grub_kernel_id = 210
 direct_disk_kernel_id = 213
@@ -143,7 +143,7 @@ def main():
 
         virt_mode = None
         # TODO: openbsd should support paravirt, it does have virtio drivers
-        if "openbsd" in args.image:
+        if "openbsd" in args.image or "netbsd" in args.image:
             virt_mode = "fullvirt"
 
         normal_config = linode.config.create(
