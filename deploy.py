@@ -143,7 +143,7 @@ def main():
 
         virt_mode = None
         # TODO: openbsd should support paravirt, it does have virtio drivers
-        if "openbsd" in args.image or "netbsd" in args.image:
+        if "openbsd" in args.image:
             virt_mode = "fullvirt"
 
         normal_config = linode.config.create(
