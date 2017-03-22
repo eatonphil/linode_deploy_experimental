@@ -101,7 +101,7 @@ def main():
         linode.ip.addprivate(l.linodeid)
         print("Added private IP")
 
-        tmp_disk_size = 3072
+        tmp_disk_size = 1024
         main_disk_size = l.totalhd - tmp_disk_size
         primary_disk = linode.disk.create(l.linodeid, "PrimaryDisk", "raw", main_disk_size)
         print("Created first disk")
