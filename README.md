@@ -8,6 +8,7 @@
 
 * freebsd-11-0
 * openbsd-6-0
+* netbsd-7-1
 
 ## Usage:
 
@@ -17,7 +18,7 @@ usage: deploy.py [-h] [-b] [-n] [-d] image
 
 positional arguments:
   image                 must supply an image. Options are [freebsd-11-0,
-                        openbsd-6-0]
+                        openbsd-6-0, netbsd-7-1]
 
 optional arguments:
   -h, --help            show this help message and exit
