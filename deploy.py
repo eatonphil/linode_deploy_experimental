@@ -141,14 +141,9 @@ def main():
             [tmp_disk.diskid, primary_disk.diskid], helpers=install_config_helpers)
         print("Created install config")
 
-        virt_mode = None
-        # TODO: openbsd should support paravirt, it does have virtio drivers
-        if "openbsd" in args.image:
-            virt_mode = "fullvirt"
-
         normal_config = linode.config.create(
             l.linodeid, direct_disk_kernel_id, "Normal Config", [primary_disk.diskid],
-            helpers=no_helpers, virt_mode=virt_mode)
+            helpers=no_helpers)
         print("Created normal config")
 
         linode.boot(l.linodeid, install_config.configid)
@@ -186,12 +181,13 @@ def main():
 
         status = "powering off"
         if args.boot_immediately:
-            status = "booting into {}".format(args.image)
+            status = "booting into {} and will be ready shortly".format(args.image)
             print(("Your Linode is {}.\n\n"
                    "Id: {}\n"
                    "IP Address: {}\n"
                    "User: root\n"
-                   "Password: password123 (change this immediately)").format(
+                   "Password: password123\n\n"
+                   "Root access over SSH is disabled.").format(
                        status, l.linodeid, ip.ipaddress))
     except Exception as e:
         print("Oh know! An exception!")
