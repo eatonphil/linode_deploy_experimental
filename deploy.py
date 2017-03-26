@@ -7,7 +7,7 @@ import time
 
 from linode_v3 import linode, avail
 
-IMAGES = ["freebsd-11-0", "openbsd-6-0", "netbsd-7-1"]
+IMAGES = ["freebsd-11-0", "openbsd-6-0", "netbsd-7-1", "centos-7-0"]
 
 grub_kernel_id = 210
 direct_disk_kernel_id = 213

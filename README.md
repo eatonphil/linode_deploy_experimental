@@ -6,9 +6,10 @@
 
 ## Supported images:
 
-* freebsd-11-0
+* freebsd-11-0 (ufs)
 * openbsd-6-0
 * netbsd-7-1
+* centos-7-0 (xfs)
 
 ## Usage:
 
@@ -18,7 +19,7 @@ usage: deploy.py [-h] [-b] [-n] [-d] image
 
 positional arguments:
   image                 must supply an image. Options are [freebsd-11-0,
-                        openbsd-6-0, netbsd-7-1]
+                        openbsd-6-0, netbsd-7-1, centos-7-0]
 
 optional arguments:
   -h, --help            show this help message and exit
