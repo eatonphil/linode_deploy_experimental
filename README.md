@@ -1,20 +1,20 @@
-## Getting started
+## Installation
 
-* [Create an API key](https://www.linode.com/docs/platform/api/api-key)
-  * Put it in ~/.linode_v3.token
-* [Install python-linode-apiv3](https://github.com/eatonphil/python-linode-apiv3)
+First, [create an API key](https://www.linode.com/docs/platform/api/api-key).
 
-## Supported images:
+Then, grab the script and its dependencies:
 
-* freebsd-11-0 (ufs)
-* openbsd-6-0
-* netbsd-7-1
-* centos-7-0 (xfs)
+```bash
+$ pip3 install linode_deploy_experimental
+```
+
+Set LINODE_APIV3_KEY in your .bashrc or .profile so you don't
+need to specify it each time you run the script.
 
 ## Usage:
 
 ```sh
-$ LINODE_APIV3_KEY=$(cat ~/.linode_v3.token) python3 deploy.py --help
+$ linode_deploy_experimental --help
 usage: deploy.py [-h] [-b] [-n] [-d] image
 
 positional arguments:
@@ -35,5 +35,12 @@ optional arguments:
 ### Example:
 
 ```sh
-$ LINODE_APIV3_KEY=$(cat ~/.linode_v3.token) python3 deploy.py freebsd-11-0
+$ linode_deploy_experimental freebsd-11-0 -bd
 ```
+
+## Supported images:
+
+* freebsd-11-0 (ufs)
+* openbsd-6-0
+* netbsd-7-1
+* centos-7-0 (xfs)

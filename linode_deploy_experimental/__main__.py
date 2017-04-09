@@ -5,7 +5,7 @@ import subprocess
 import sys
 import time
 
-from linode_v3 import linode, avail
+from linode_api3 import linode, avail
 
 IMAGES = ["freebsd-11-0", "openbsd-6-0", "netbsd-7-1", "centos-7-0"]
 
@@ -32,7 +32,9 @@ def wait_for_running(l):
 
 
 def wait_for_ssh(address, password, cmd):
-    while subprocess.call(["./ssh.tcl", address, password, cmd]) > 0:
+    this_path = os.path.dirname(os.path.realpath(__file__))
+    tcl_path = os.path.join(this_path, "ssh.tcl")
+    while subprocess.call([tcl_path, address, password, cmd]) > 0:
         print("Waiting for ssh server")
         time.sleep(15)
 
