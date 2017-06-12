@@ -8,6 +8,8 @@ Then, grab the script and its dependencies:
 $ pip3 install linode_deploy_experimental
 ```
 
+NOTE: some distributions may require you to explicitly install the TCL `expect` program.
+
 Set LINODE_APIV3_KEY in your .bashrc or .profile so you don't
 need to specify it each time you run the script.
 
