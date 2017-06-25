@@ -5,7 +5,7 @@ import subprocess
 import sys
 import time
 
-from linode_api3 import linode, avail
+from linode_api3 import linode, avail, init
 
 IMAGES = ["freebsd-11-0", "openbsd-6-0", "netbsd-7-1", "centos-7-0"]
 
@@ -55,6 +55,10 @@ def get_args():
                 "").format(", ".join(IMAGES))
     parser.add_argument("image", help=image_help, type=str)
 
+    key_help = "your APIv3 key must be supplied."
+    parser.add_argument("--api_key", help=key_help, type=str,
+                        default=os.environ.get("LINODE_APIV3_KEY"))
+
     boot_immediately_help = ("Boots immediately into the image after install "
                              "with an unsafe password")
     parser.add_argument("-b", "--boot-immediately",
@@ -70,6 +74,9 @@ def get_args():
 
     args = parser.parse_args()
 
+    if not args.api_key:
+        exit("LINODE_APIV3_KEY environment variable or --api_key flag must be set.")
+
     if not args.image in IMAGES:
         exit("image must be one of [{}]".format(", ".join(IMAGES)))
 
@@ -78,6 +85,8 @@ def get_args():
 
 def main():
     args = get_args()
+
+    init(args.api_key)
 
     datacenters = avail.datacenters()
     print("Fetched all datacenters")
@@ -192,7 +201,7 @@ def main():
                    "Root access over SSH is disabled.").format(
                        status, l.linodeid, ip.ipaddress))
     except Exception as e:
-        print("Oh know! An exception!")
+        print("Oh no! An exception!")
         if args.delete_on_failure and hasattr(l, "linodeid") and l.linodeid:
             print("Deleting Linode")
             linode.delete(l, skip_checks=True)

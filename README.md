@@ -17,7 +17,8 @@ need to specify it each time you run the script.
 
 ```sh
 $ linode_deploy_experimental --help
-usage: deploy.py [-h] [-b] [-n] [-d] image
+usage: linode_deploy_experimental [-h] [--api_key API_KEY] [-b] [-n] [-d]
+                                  image
 
 positional arguments:
   image                 must supply an image. Options are [freebsd-11-0,
@@ -25,6 +26,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  --api_key API_KEY     your APIv3 key must be supplied.
   -b, --boot-immediately
                         Boots immediately into the image after install with an
                         unsafe password
@@ -37,7 +39,7 @@ optional arguments:
 ### Example:
 
 ```sh
-$ linode_deploy_experimental freebsd-11-0 -bd
+$ linode_deploy_experimental freebsd-11-0 -bd --api_key $(cat ~/.linode_v3.token)
 ```
 
 ## Supported images:

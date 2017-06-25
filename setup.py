@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='linode-deploy-experimental',
-      version='0.1',
+      version='0.2',
       description='Deploy experimental disk images to Linode',
       author='Phil Eaton',
       url='https://github.com/eatonphil/linode-deploy-experimental',
